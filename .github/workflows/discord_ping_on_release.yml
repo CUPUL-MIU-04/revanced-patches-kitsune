@@ -1,0 +1,56 @@
+name: Ping Discord on Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  notify-discord:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository (optional)
+        uses: actions/checkout@v4
+        if: false # Deshabilitado ya que no necesitamos el código para esta acción
+        
+      - name: Notify Discord via Webhook
+        uses: sarisia/actions-status-discord@v1
+        id: webhook
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK_RELEASES }} # Usar un secret específico
+          ack_no_webhook: true
+          nodetail: true
+          notimestamp: true
+          username: "ReVanced Patches"
+          avatar_url: "https://raw.githubusercontent.com/ReVanced/revanced-brand/main/icons/svg/revanced.svg"
+          content: "<@&1271197877724643461>" # ID del rol a mencionar
+          title: "🎉 New Patches Release: ${{ github.event.release.tag_name }}"
+          description: |
+            **${{ github.event.release.name }}**  
+            [View Release](${{ github.event.release.html_url }}) | [Repository](https://github.com/CUPUL-MIU-04/revanced-patches)
+            
+            ```${{ github.event.release.body }}```
+          color: "0x00FF00" # Verde
+
+      - name: Fallback Notification (if webhook fails)
+        if: steps.webhook.outcome != 'success'
+        uses: actions/github-script@v7
+        env:
+          WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_RELEASES }}
+        with:
+          script: |
+            const { WEBHOOK_URL } = process.env
+            const axios = require('axios')
+            
+            try {
+              await axios.post(WEBHOOK_URL, {
+                content: "<@&1271197877724643461>",
+                embeds: [{
+                  title: "🚨 New Patches Release: ${{ github.event.release.tag_name }}",
+                  description: "A new release was published but the main notification failed.\n\n[View Release](${{ github.event.release.html_url }})",
+                  color: 0xFF0000,
+                  timestamp: new Date().toISOString()
+                }]
+              })
+            } catch (error) {
+              console.error('Failed to send fallback notification:', error)
+            }

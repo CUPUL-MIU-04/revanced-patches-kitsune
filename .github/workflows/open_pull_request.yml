@@ -1,0 +1,63 @@
+name: Open PR from dev to main
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+env:
+  PR_TITLE_PREFIX: "chore: Merge dev to main"
+  PR_BODY: |
+    This is an automated PR to merge changes from `dev` to `main`.
+    
+    **Changes included:**
+    - Latest commits from development branch
+    - Automated version updates (if any)
+    
+    **Review checklist:**
+    - [ ] Verify all tests pass
+    - [ ] Check changelog updates
+    - [ ] Confirm no breaking changes
+
+jobs:
+  open-pull-request:
+    name: Create PR to main
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Necesario para comparar branches
+
+      - name: Get branch info
+        id: branch-info
+        run: |
+          echo "head_ref=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_OUTPUT
+          echo "last_commit=$(git log -1 --pretty=%B)" >> $GITHUB_OUTPUT
+
+      - name: Check if PR needed
+        id: check-pr
+        run: |
+          # Verificar si hay diferencias entre dev y main
+          if [ -z "$(git diff origin/main origin/dev)" ]; then
+            echo "pr_needed=false" >> $GITHUB_OUTPUT
+            echo "No changes detected between dev and main"
+          else
+            echo "pr_needed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Pull Request
+        if: steps.check-pr.outputs.pr_needed == 'true'
+        uses: repo-sync/pull-request@v2
+        with:
+          source_branch: dev
+          destination_branch: main
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          pr_title: "${{ env.PR_TITLE_PREFIX }} - $(date +'%Y-%m-%d')"
+          pr_body: "${{ env.PR_BODY }}\n\n**Last commit message:**\n${{ steps.branch-info.outputs.last_commit }}"
+          pr_draft: false  # Cambiar a true si prefieres PRs en modo draft
+          pr_assignee: "${{ github.actor }}"  # Asigna el PR a quien activó el workflow
+          pr_label: "automated,merge"  # Etiquetas para el PR
+          pr_reviewer: "CUPUL-MIU-04/team"  # Reemplaza con tu team si aplica
+          pr_allow_empty: false  # No crear PR si no hay cambios

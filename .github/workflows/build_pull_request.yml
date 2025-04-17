@@ -1,0 +1,47 @@
+name: Build pull request
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Cache Gradle
+        uses: burrunan/gradle-cache-action@v1
+        with:
+          # Opciones específicas para el cache de Gradle
+          gradle-version: wrapper
+          arguments: build
+
+      - name: Build with Gradle
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          chmod +x gradlew
+          ./gradlew build --no-daemon --stacktrace
+
+      - name: Run tests (optional)
+        run: ./gradlew test --no-daemon
+
+      - name: Verify patches (optional)
+        run: |
+          # Aquí puedes añadir comandos específicos para verificar los patches
+          # Por ejemplo:
+          ./gradlew :cli:build
+          ./gradlew listPatches
