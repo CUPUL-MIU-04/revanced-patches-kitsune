@@ -1,10 +1,8 @@
 ## 🧩 ReVanced Patches
 
-ReVanced Extended Patches.
+ReVanced Extended Patches. 
 
-## Documentation
-
-Check the [wiki](https://github.com/CUPUL-MIU-04/revanced-patches/wiki) for resources on patching, customization, and debugging.
+See the [documentation](https://github.com/cupul-miu-04/revanced-documentation#readme) to learn how to apply patches and build ReVanced Extended apps.
 
 ## 📋 List of patches in this repository
 

@@ -1,4 +1,4 @@
-name: Ping Discord on Release
+name: Ping Discord on release
 
 on:
   release:
@@ -8,49 +8,35 @@ jobs:
   notify-discord:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository (optional)
-        uses: actions/checkout@v4
-        if: false # Deshabilitado ya que no necesitamos el código para esta acción
-        
-      - name: Notify Discord via Webhook
-        uses: sarisia/actions-status-discord@v1
-        id: webhook
+      - uses: sarisia/actions-status-discord@v1
+        if: always()
+        id: webhook # set id to reference output payload later
         with:
-          webhook_url: ${{ secrets.DISCORD_WEBHOOK_RELEASES }} # Usar un secret específico
-          ack_no_webhook: true
+          ack_no_webhook: true # suppress warning
           nodetail: true
           notimestamp: true
-          username: "ReVanced Patches"
-          avatar_url: "https://raw.githubusercontent.com/ReVanced/revanced-brand/main/icons/svg/revanced.svg"
-          content: "<@&1362679378722689095>" # ID del rol a mencionar
-          title: "🎉 New Patches Release: ${{ github.event.release.tag_name }}"
+          
+          username: ReVanced Kitsune
+          content: "<@&1362679378722689095>"
+          title: "Patches `${{ github.event.release.tag_name }}` has been released!"
           description: |
-            **${{ github.event.release.name }}**  
-            [View Release](${{ github.event.release.html_url }}) | [Repository](github.com/CUPUL-MIU-04/revanced-patches-kitsune)
-            
-            ```${{ github.event.release.body }}```
-          color: "0x00FF00" # Verde
+            Click [here](${{ github.event.release.html_url }}) to read the changelog and release notes.
 
-      - name: Fallback Notification (if webhook fails)
-        if: steps.webhook.outcome != 'success'
-        uses: actions/github-script@v7
+      - run: npm install axios
+      - uses: actions/github-script@v7
         env:
-          WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_RELEASES }}
+          WEBHOOK_PAYLOAD: ${{ steps.webhook.outputs.payload }}
+          WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         with:
           script: |
-            const { WEBHOOK_URL } = process.env
-            const axios = require('axios')
-            
-            try {
-              await axios.post(WEBHOOK_URL, {
-                content: "<@&1271197877724643461>",
-                embeds: [{
-                  title: "🚨 New Patches Release: ${{ github.event.release.tag_name }}",
-                  description: "A new release was published but the main notification failed.\n\n[View Release](${{ github.event.release.html_url }})",
-                  color: 0xFF0000,
-                  timestamp: new Date().toISOString()
-                }]
-              })
-            } catch (error) {
-              console.error('Failed to send fallback notification:', error)
-            }
+            const axios = require("axios")
+
+            const { WEBHOOK_PAYLOAD, WEBHOOK_URL } = process.env
+
+            const payload = JSON.parse(WEBHOOK_PAYLOAD)
+
+            // remove the color field to make it transparent
+            delete payload.embeds[0].color
+
+            // send to Discord 
+            axios.post(WEBHOOK_URL, payload)

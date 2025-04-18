@@ -1,58 +1,18 @@
-name: Update Gradle Wrapper
+name: Update Gradle wrapper
 
 on:
   schedule:
-    - cron: "0 0 1 * *"  # Ejecutar el primer día de cada mes a medianoche
+    - cron: "0 0 1 * *"
   workflow_dispatch:
-  push:
-    branches:
-      - dev
-    paths:
-      - 'gradle/wrapper/gradle-wrapper.properties'
 
 jobs:
   update:
-    name: Update Gradle Wrapper
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: dev
-          fetch-depth: 0
-
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
 
       - name: Update Gradle Wrapper
         uses: gradle-update/update-gradle-wrapper-action@v1
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           target-branch: dev
-          labels: 'dependencies,gradle'
-          reviewers: 'CUPUL-MIU-04/team'  # Reemplaza con tu equipo o elimina si no aplica
-          assignees: ${{ github.actor }}
-          pr-title: 'chore(deps): Update Gradle wrapper to latest version'
-          pr-body: |
-            This PR updates the Gradle wrapper to the latest stable version.
-            
-            **Changes included:**
-            - Updated Gradle wrapper version
-            - Verified compatibility with current build
-            
-            **Review checklist:**
-            - [ ] Verify build passes
-            - [ ] Check compatibility with all modules
-            - [ ] Confirm no breaking changes
-
-      - name: Verify Gradle Wrapper
-        run: |
-          ./gradlew --version
-          ./gradlew tasks --all

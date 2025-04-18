@@ -7,11 +7,11 @@ on:
       - dev
 
 jobs:
-  build:
-    name: Build and Test
+  release:
+    name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -24,24 +24,8 @@ jobs:
 
       - name: Cache Gradle
         uses: burrunan/gradle-cache-action@v1
-        with:
-          # Opciones específicas para el cache de Gradle
-          gradle-version: wrapper
-          arguments: build
 
-      - name: Build with Gradle
+      - name: Build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          chmod +x gradlew
-          ./gradlew build --no-daemon --stacktrace
-
-      - name: Run tests (optional)
-        run: ./gradlew test --no-daemon
-
-      - name: Verify patches (optional)
-        run: |
-          # Aquí puedes añadir comandos específicos para verificar los patches
-          # Por ejemplo:
-          ./gradlew :cli:build
-          ./gradlew listPatches
+        run: ./gradlew build --no-daemon

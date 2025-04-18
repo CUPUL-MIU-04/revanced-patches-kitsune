@@ -1,10 +1,8 @@
 ## 🧩 ReVanced Patches
 
-ReVanced Extended Patches.
+ReVanced Extended Patches. 
 
-## Documentation
-
-Check the [wiki](https://github.com/anddea/revanced-patches/wiki) for resources on patching, customization, and debugging.
+See the [documentation](https://github.com/cupul-miu-04/revanced-documentation#readme) to learn how to apply patches and build ReVanced Extended apps.
 
 ## 📋 List of patches in this repository
 
@@ -39,7 +37,7 @@ Check the [wiki](https://github.com/anddea/revanced-patches/wiki) for resources 
 | `Enable OPUS codec` | Adds an option to enable the OPUS audio codec if the player response includes it. | 19.05.36 ~ 19.47.53 |
 | `Enable debug logging` | Adds an option to enable debug logging. | 19.05.36 ~ 19.47.53 |
 | `Enable gradient loading screen` | Adds an option to enable the gradient loading screen. | 19.05.36 ~ 19.47.53 |
-| `Force player buttons background` | Changes the dark background surrounding the video player controls at compile time. | 19.05.36 ~ 19.47.53 |
+| `Force hide player buttons background` | Removes, at compile time, the dark background surrounding the video player controls. | 19.05.36 ~ 19.47.53 |
 | `Fullscreen components` | Adds options to hide or change components related to fullscreen. | 19.05.36 ~ 19.47.53 |
 | `GmsCore support` | Allows patched Google apps to run without root and under a different package name by using GmsCore instead of Google Play Services. | 19.05.36 ~ 19.47.53 |
 | `Hide Shorts dimming` | Removes, at compile time, the dimming effect at the top and bottom of Shorts videos. | 19.05.36 ~ 19.47.53 |
@@ -73,13 +71,13 @@ Check the [wiki](https://github.com/anddea/revanced-patches/wiki) for resources 
 | `SponsorBlock` | Adds options to enable and configure SponsorBlock, which can skip undesired video segments, such as sponsored content. | 19.05.36 ~ 19.47.53 |
 | `Spoof app version` | Adds options to spoof the YouTube client version. This can be used to restore old UI elements and features. | 19.05.36 ~ 19.47.53 |
 | `Spoof streaming data` | Adds options to spoof the streaming data to allow playback. | 19.05.36 ~ 19.47.53 |
-| `Spoof watch history` | Adds an option to change the domain of the watch history or check its status. | 19.05.36 ~ 19.47.53 |
 | `Swipe controls` | Adds options for controlling volume and brightness with swiping, and whether to enter fullscreen when swiping down below the player. | 19.05.36 ~ 19.47.53 |
 | `Theme` | Changes the app's themes to the values specified in patch options. | 19.05.36 ~ 19.47.53 |
 | `Toolbar components` | Adds options to hide or change components located on the toolbar, such as the search bar, header, and toolbar buttons. | 19.05.36 ~ 19.47.53 |
 | `Translations for YouTube` | Add translations or remove string resources. | 19.05.36 ~ 19.47.53 |
 | `Video playback` | Adds options to customize settings related to video playback, such as default video quality and playback speed. | 19.05.36 ~ 19.47.53 |
 | `Visual preferences icons for YouTube` | Adds icons to specific preferences in the settings. | 19.05.36 ~ 19.47.53 |
+| `Watch history` | Adds an option to change the domain of the watch history or check its status. | 19.05.36 ~ 19.47.53 |
 </details>
 
 ### [📦 `com.google.android.apps.youtube.music`](https://play.google.com/store/apps/details?id=com.google.android.apps.youtube.music)
