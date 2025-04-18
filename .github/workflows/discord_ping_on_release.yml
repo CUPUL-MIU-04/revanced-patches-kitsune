@@ -26,7 +26,7 @@ jobs:
           title: "🎉 New Patches Release: ${{ github.event.release.tag_name }}"
           description: |
             **${{ github.event.release.name }}**  
-            [View Release](${{ github.event.release.html_url }}) | [Repository](https://github.com/CUPUL-MIU-04/revanced-patches)
+            [View Release](${{ github.event.release.html_url }}) | [Repository](github.com/CUPUL-MIU-04/revanced-patches-kitsune)
             
             ```${{ github.event.release.body }}```
           color: "0x00FF00" # Verde
