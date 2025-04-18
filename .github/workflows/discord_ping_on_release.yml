@@ -22,7 +22,7 @@ jobs:
           notimestamp: true
           username: "ReVanced Patches"
           avatar_url: "https://raw.githubusercontent.com/ReVanced/revanced-brand/main/icons/svg/revanced.svg"
-          content: "<@&1362675584005701812>" # ID del rol a mencionar
+          content: "<@&1362679378722689095>" # ID del rol a mencionar
           title: "🎉 New Patches Release: ${{ github.event.release.tag_name }}"
           description: |
             **${{ github.event.release.name }}**  
