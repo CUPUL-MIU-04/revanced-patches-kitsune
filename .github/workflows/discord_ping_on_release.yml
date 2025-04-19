@@ -17,7 +17,7 @@ jobs:
           notimestamp: true
           
           username: ReVanced Kitsune
-          content: "<@&1362679378722689095>"
+          content: "<@&1362963405761413150>"
           title: "Patches `${{ github.event.release.tag_name }}` has been released!"
           description: |
             Click [here](${{ github.event.release.html_url }}) to read the changelog and release notes.
