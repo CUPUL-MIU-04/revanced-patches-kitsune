@@ -1,4 +1,4 @@
-![Logo Kitsune](https://github.com/CUPUL-MIU-04/CUPUL-MIU-04/blob/master/assets/Kitsune.png)
+![Logo Kitsune](https://github.com/CUPUL-MIU-04/revanced-patches-kitsune1/blob/master/assets/Kitsune.png)
 
 # 🦊 ReVanced Patches Kitsune
 
