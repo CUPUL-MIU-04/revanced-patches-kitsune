@@ -1,0 +1,71 @@
+name: Release
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master  # Cambiado de main a master
+      - dev
+
+jobs:
+  release:
+    name: Release
+    permissions:
+      contents: write
+      packages: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Cache Gradle
+        uses: burrunan/gradle-cache-action@v1
+
+      - name: Build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew generatePatchesFiles clean
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Import GPG key (Primary)
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          fingerprint: ${{ vars.GPG_FINGERPRINT }}
+
+      - name: Import GPG key (Secondary)
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key_2: ${{ secrets.GPG_PRIVATE_KEY_2 }}
+          passphrase_2: ${{ secrets.GPG_PASSPHRASE_2 }}
+          fingerprint_2: ${{ vars.GPG_FINGERPRINT_2 }}
+          trust_level: 5
+
+      - name: Configure Git signing
+        run: |
+          git config --global user.signingkey ${{ vars.GPG_FINGERPRINT }}
+          git config --global commit.gpgsign true
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPG_KEY_ID: ${{ vars.GPG_FINGERPRINT }}  # Especifica qué clave usar
+        run: npm exec semantic-release

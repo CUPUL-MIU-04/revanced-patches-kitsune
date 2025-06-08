@@ -1,0 +1,101 @@
+{
+  "branches": [
+    "main",
+    {
+      "name": "dev",
+      "prerelease": true
+    },
+    {
+      "name": "feat/*",
+      "prerelease": "${name.replace(/^feat\\//g, '')}"
+    }
+  ],
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "conventionalcommits",
+        "releaseRules": [
+          { "type": "build", "scope": "deps", "release": "patch" },
+          { "type": "ci", "release": false },
+          { "type": "docs", "release": false },
+          { "type": "style", "release": false },
+          { "type": "refactor", "release": "patch" },
+          { "type": "perf", "release": "patch" }
+        ],
+        "parserOpts": {
+          "noteKeywords": ["BREAKING CHANGE", "BREAKING CHANGES"]
+        }
+      }
+    ],
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        "preset": "conventionalcommits",
+        "parserOpts": {
+          "mergePattern": "^Merge pull request #(\\d+) from (.*)$",
+          "mergeCorrespondence": ["id", "source"]
+        }
+      }
+    ],
+    [
+      "@semantic-release/changelog",
+      {
+        "changelogFile": "CHANGELOG.md",
+        "changelogTitle": "# Changelog - ReVanced Patches Kitsune"
+      }
+    ],
+    [
+      "gradle-semantic-release-plugin",
+      {
+        "buildTask": "build",
+        "versionFile": "gradle.properties",
+        "versionProperty": "version",
+        "propsFile": true
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "CHANGELOG.md",
+          "gradle.properties",
+          "patches.json",
+          "patches/*/version.txt"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          {
+            "path": "patches/build/libs/patches-*.rvpk",
+            "label": "Kitsune Patches v${nextRelease.version}"
+          },
+          {
+            "path": "patches.json",
+            "label": "Patches Metadata"
+          }
+        ],
+        "successComment": false,
+        "releasedLabels": false,
+        "failComment": false
+      }
+    ],
+    [
+      "@saithodev/semantic-release-backmerge",
+      {
+        "backmergeBranches": [
+          { "from": "main", "to": "dev" }
+        ],
+        "clearWorkspace": true,
+        "plugins": [
+          "@semantic-release/commit-analyzer",
+          "@semantic-release/release-notes-generator"
+        ]
+      }
+    ]
+  ]
+}

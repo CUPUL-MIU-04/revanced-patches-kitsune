@@ -1,0 +1,61 @@
+{
+  "name": "revanced-patches-kitsune",
+  "version": "0.0.0-development",
+  "description": "Custom ReVanced patches for Kitsune app",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "semantic-release": "semantic-release",
+    "prepare": "husky install",
+    "release:dry-run": "semantic-release --dry-run",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CUPUL-MIU-04/revanced-patches-kitsune.git"
+  },
+  "keywords": [
+    "revanced",
+    "kitsune",
+    "patches",
+    "android"
+  ],
+  "author": "CUPUL-MIU-04",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/CUPUL-MIU-04/revanced-patches-kitsune/issues"
+  },
+  "homepage": "https://github.com/CUPUL-MIU-04/revanced-patches-kitsune#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^17.7.2",
+    "@commitlint/config-conventional": "^17.7.0",
+    "@saithodev/semantic-release-backmerge": "^4.0.1",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^11.0.0",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^9.0.4",
+    "@semantic-release/release-notes-generator": "^12.0.0",
+    "conventional-changelog-cli": "^2.2.2",
+    "gradle-semantic-release-plugin": "^1.10.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.2",
+    "semantic-release": "^24.1.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "release": {
+    "extends": "./.releaserc.json"
+  },
+  "lint-staged": {
+    "*.{kt,kts}": [
+      "ktlint --format",
+      "git add"
+    ],
+    "*.{md,json}": [
+      "prettier --write",
+      "git add"
+    ]
+  }
+}

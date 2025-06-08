@@ -1,0 +1,35 @@
+name: Update Gradle wrapper
+
+on:
+  schedule:
+    - cron: "0 0 1 * *"  # Se ejecuta el día 1 de cada mes a medianoche UTC
+  workflow_dispatch:     # Permite ejecución manual
+
+jobs:
+  update:
+    name: Update Gradle Wrapper
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: master    # Trabaja sobre la rama master
+          fetch-depth: 0 # Necesario para operaciones Git completas
+
+      - name: Update Gradle Wrapper
+        uses: gradle-update/update-gradle-wrapper-action@v1
+        with:
+          target-branch: master  # Rama destino para los cambios
+          github-token: ${{ secrets.GITHUB_TOKEN }}  # Permite crear commits/PRs
+          # Opcional: descomenta para forzar versión específica
+          # gradle-version: '8.5' 
+          
+      - name: Create PR to dev (Opcional)
+        if: github.ref == 'refs/heads/master'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          head-branch: master
+          base-branch: dev
+          title: "chore: Update Gradle Wrapper from master"
+          body: "Auto-generated PR with Gradle Wrapper updates"
+          labels: "dependencies,automated"

@@ -1,0 +1,48 @@
+name: Notificación de Release en Discord
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  notify-discord:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: sarisia/actions-status-discord@v1
+        if: always()
+        id: webhook
+        with:
+          ack_no_webhook: true
+          nodetail: true
+          notimestamp: true
+          
+          username: "ReVanced Kitsune"
+          avatar_url: ""
+          content: "<@&1373981862204280854>"  # Reemplaza con tu ID de rol
+          title: "🆕 Nueva versión de parches: `${{ github.event.release.tag_name }}`"
+          description: |
+            **¡Actualización disponible!**  
+            📌 **Versión**: `${{ github.event.release.tag_name }}`  
+            📋 [Ver changelog](${{ github.event.release.html_url }})  
+            🛠️ [Repositorio](https://github.com/CUPUL-MIU-04/revanced-patches-kitsune)
+
+      - run: npm install axios
+      - uses: actions/github-script@v7
+        env:
+          WEBHOOK_PAYLOAD: ${{ steps.webhook.outputs.payload }}
+          WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        with:
+          script: |
+            const axios = require('axios')
+            const { WEBHOOK_PAYLOAD, WEBHOOK_URL } = process.env
+            const payload = JSON.parse(WEBHOOK_PAYLOAD)
+
+            // Personalización del embed
+            payload.embeds[0].color = 0xFF0000  // Rojo (#FF0000)
+            payload.embeds[0].footer = {
+              text: "ReVanced Kitsune • " + new Date().toLocaleDateString('es-ES'),
+              icon_url: ""
+            }
+
+            axios.post(WEBHOOK_URL, payload)
+              .catch(error => console.error('Error al notificar:', error))

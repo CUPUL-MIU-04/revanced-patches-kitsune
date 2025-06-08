@@ -1,0 +1,15 @@
+package app.kitsune.extension.music.patches.misc;
+
+import app.kitsune.extension.music.settings.Settings;
+
+@SuppressWarnings("unused")
+public class DrcAudioPatch {
+    private static final boolean DISABLE_DRC_AUDIO = Settings.DISABLE_DRC_AUDIO.get();
+
+    public static float disableDrcAudio(float original) {
+        if (DISABLE_DRC_AUDIO) {
+            return 0f;
+        }
+        return original;
+    }
+}

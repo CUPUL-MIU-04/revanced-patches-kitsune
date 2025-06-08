@@ -1,0 +1,95 @@
+### Project Specific ###
+# Build outputs
+/build/
+/out/
+/bin/
+/gen/
+
+# Kitsune specific
+*.rvpk
+patches/build/
+integrations/build/
+
+### Android ###
+# Built files
+*.apk
+*.aar
+*.ap_
+*.aab
+
+# Generated files
+bin/
+gen/
+
+### Java ###
+*.class
+*.log
+*.ctxt
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+.mtj.tmp/
+
+### Kotlin ###
+# KSP & KAPT
+**/generated/
+
+### Gradle ###
+.gradle/
+gradle-app.setting
+.gradletasknamecache
+!gradle-wrapper.jar
+!**/src/**/build/
+
+### IDE ###
+# IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# VSCode
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Eclipse
+.settings/
+.project
+.classpath
+*.tmp
+
+### System ###
+# OS metadata
+.DS_Store
+Thumbs.db
+*.swp
+
+### Local Configuration ###
+# Local properties
+local.properties
+local.env
+.env
+
+# Gradle properties (contienen credenciales)
+gradle.properties
+
+### Dependency Management ###
+# Node modules
+node_modules/
+
+# Maven
+target/
+.m2/
+
+### Documentation ###
+# Generated docs
+/docs/api/
+/docs/build/

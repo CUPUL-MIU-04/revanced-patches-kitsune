@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ReVanced Patches Kitsune - Selector de Estilos</title>
+    <style>
+        /* Estilos base */
+        body {
+            background-color: #1e1e1e;
+            font-family: 'Segoe UI', sans-serif;
+            color: #ffffff;
+            padding: 20px;
+        }
+        .logo-container {
+            text-align: center;
+            margin: 50px auto;
+            max-width: 1000px;
+            padding: 30px;
+            background: #2d2d2d;
+            border-radius: 50px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        
+        /* Selector de opciones */
+        .option-selector {
+            margin: 20px 0;
+            padding: 15px;
+            background: #333;
+            border-radius: 10px;
+        }
+        .option-selector label {
+            margin: 0 15px;
+            cursor: pointer;
+        }
+        .option-selector input {
+            margin-right: 5px;
+        }
+        
+        /* Fondos para cada opción */
+        .option1 {
+            background: linear-gradient(135deg, #252525 0%, #1a1a1a 100%);
+            border: 1px solid #333;
+        }
+        .option2 {
+            background: linear-gradient(135deg, #2a2000 0%, #1a1400 100%);
+            border: 1px solid #ff6600;
+        }
+        .option3 {
+            background: linear-gradient(135deg, #331a00 0%, #1a0d00 100%);
+            border: 1px solid #ff8c00;
+        }
+        
+        /* Estilos para las 3 opciones */
+        .option1 h2 .emoji {
+            color: inherit;
+        }
+        .option2 h2 .emoji {
+            color: #ff6600;
+            text-shadow: 0 0 5px #ff8c00;
+        }
+        .option3 h2 {
+            background: linear-gradient(90deg, #ff6600, #ff8c00, #ff4500);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        /* Estilos compartidos */
+        h2 {
+            display: inline-block;
+            font-size: 24px;
+            margin: 15px 0;
+        }
+        .emoji {
+            font-size: 28px;
+            margin-right: 8px;
+            vertical-align: middle;
+            transition: all 0.3s;
+        }
+        .option {
+            margin-bottom: 30px;
+            padding: 25px;
+            border-radius: 10px;
+            transition: all 0.3s;
+            display: none; /* Ocultamos todas por defecto */
+        }
+        .option.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        .option p {
+            color: #aaa;
+            font-style: italic;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <img src="https://github.com/CUPUL-MIU-04/KITSUNE_MICROG_PROJECT/blob/main/assets/Kitsune.png"
+             alt="Logo Kitsune" 
+             style="width: 1000px; border-radius: 5%; border: 0px solid #ff6600;">
+        
+        <div class="option-selector">
+            <h3>Selecciona el estilo a mostrar:</h3>
+            <label><input type="radio" name="option" value="1" checked> Opción 1: Emoji original</label>
+            <label><input type="radio" name="option" value="2"> Opción 2: Emoji naranja</label>
+            <label><input type="radio" name="option" value="3"> Opción 3: Todo con degradado</label>
+        </div>
+        
+        <!-- OPCIÓN 1: Emoji original -->
+        <div class="option option1 active">
+            <h2><span class="emoji">🦊</span> ReVanced Patches Kitsune</h2>
+            <p>Estilo nativo - El emoji conserva sus colores originales</p>
+        </div>
+        
+        <!-- OPCIÓN 2: Emoji naranja -->
+        <div class="option option2">
+            <h2><span class="emoji">🦊</span> ReVanced Patches Kitsune</h2>
+            <p>Estilo personalizado - Emoji en tono naranja brillante</p>
+        </div>
+        
+        <!-- OPCIÓN 3: Todo con degradado -->
+        <div class="option option3">
+            <h2><span class="emoji">🦊</span> ReVanced Patches Kitsune</h2>
+            <p>Estilo premium - Degradado completo en texto y emoji</p>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('input[name="option"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                // Oculta todas las opciones
+                document.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.remove('active');
+                });
+                // Muestra solo la seleccionada
+                document.querySelector(`.option${this.value}`).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+# Parche de compatibilidad mejorado para Kitsune
+name = "kitsune-compatibility-fix"
+description = "Force AndroidManifest compatibility for Kitsune across all devices (ARMv7/ARM64, minSdk, etc.)"
+minVersion = "4.5.0"  # Versión mínima de tu patcher
+target = "AndroidManifest.xml"
+version = "1.0.0"    # Versión de este parche específico
+
+[metadata]
+author = "CUPUL-MIU-04"
+priority = "high"    # Se aplicará temprano en el proceso
+
+# 1. Aseguramos compatibilidad con SDK y arquitecturas
+[replacements]
+# Agrega configuración de SDK con valores óptimos para Kitsune
+[[replacements]]
+match = '<manifest xmlns:android="http://schemas.android.com/apk/res/android">'
+replace = '''<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="34" android:maxSdkVersion="34"/>'''
+
+# Soporte multiarquitectura mejorado
+[[replacements]]
+match = '</manifest>'
+replace = '''<!-- Compatibilidad Kitsune -->
+    <uses-feature android:name="android.hardware.armv7" android:required="false"/>
+    <uses-feature android:name="android.hardware.arm64" android:required="true"/>
+    <uses-feature android:name="android.hardware.x86" android:required="false"/>
+    <uses-feature android:name="android.hardware.x86_64" android:required="false"/>
+    </manifest>'''
+
+# 2. Exclusiones de seguridad
+[dependencies]
+exclude = [
+  "remove-native-libraries",    # Conserva librerías nativas
+  "change-package-name",        # Mantiene el package original
+  "disable-target-sdk-version", # Previene modificaciones inseguras
+  "debug-mode"                 # Evita modo debug en builds finales
+]
+
+# 3. Permisos esenciales para Kitsune
+[permissions]
+add = [
+  "android.permission.INTERNET",
+  "android.permission.WAKE_LOCK",
+  "android.permission.ACCESS_NETWORK_STATE"
+]
+
+# 4. Configuraciones adicionales para Kitsune
+[settings]
+backupManifest = true          # Crea backup del manifiesto original
+strictVerification = false     # Permite cierta flexibilidad en ROMs custom

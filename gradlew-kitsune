@@ -1,0 +1,33 @@
+#!/bin/sh
+
+# Define variables específicas de Kitsune
+KITSUME_VERSION="4.5.4"
+PATCHES_MODULE=":patches"
+
+# Función para build principal
+build_kitsune() {
+  ./gradlew $PATCHES_MODULE:build \
+    -Pkitsune.version=$KITSUME_VERSION \
+    -PbuildTool=revanced \
+    --no-daemon \
+    --stacktrace
+}
+
+# Función para generar .rvpk
+generate_rvpk() {
+  ./gradlew $PATCHES_MODULE:assembleRelease \
+    -Pkitsune.output=patches-$KITSUME_VERSION.rvpk \
+    -x test
+}
+
+case "$1" in
+  build)
+    build_kitsune
+    ;;
+  rvpk)
+    generate_rvpk
+    ;;
+  *)
+    echo "Uso: $0 {build|rvpk}"
+    exit 1
+esac
