@@ -1,6 +1,6 @@
 {
   "branches": [
-    "main",
+    "master",
     {
       "name": "dev",
       "prerelease": true
@@ -88,7 +88,7 @@
       "@saithodev/semantic-release-backmerge",
       {
         "backmergeBranches": [
-          { "from": "main", "to": "dev" }
+          { "from": "master", "to": "dev" }
         ],
         "clearWorkspace": true,
         "plugins": [
