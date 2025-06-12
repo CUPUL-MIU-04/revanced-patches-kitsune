@@ -1,14 +1,23 @@
 plugins {
+    id 'java'
     id 'maven-publish'
 }
 
+group = ''  // Reemplaza con tu grupo
+version = '1.0.0'  // Usa versión adecuada
+
 publishing {
     publications {
-        mavenJava(MavenPublication) {
+        maven(MavenPublication) {
             from components.java
-            groupId = 'com.github.cupul-miu-04'
-            artifactId = 'revanced-patches-kitsune'
-            version = '1.0.0'
+            
+            // Configuración adicional opcional:
+            artifact sourcesJar {
+                classifier 'sources'
+            }
+            artifact javadocJar {
+                classifier 'javadoc'
+            }
         }
     }
     repositories {
@@ -21,4 +30,15 @@ publishing {
             }
         }
     }
+}
+
+// Tareas opcionales para JARs de fuentes y javadoc
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    classifier = 'javadoc'
 }
