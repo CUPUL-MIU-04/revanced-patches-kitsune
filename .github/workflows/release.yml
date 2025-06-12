@@ -31,7 +31,7 @@ jobs:
         uses: burrunan/gradle-cache-action@v1
 
       - name: Build
-        run: sh ./gradlew generatePatchesFiles clean
+        run: ./gradlew generatePatchesFiles clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
