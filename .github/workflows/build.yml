@@ -9,7 +9,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           java-version: '17'
-      - run: ./gradlew build
-      - run: ./gradlew publish
+      - run: sh ./gradlew build
+      - run: sh ./gradlew publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
