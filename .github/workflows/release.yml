@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - master  # Cambiado de main a master
+      - master
       - dev
 
 jobs:
@@ -31,10 +31,10 @@ jobs:
         uses: burrunan/gradle-cache-action@v1
 
       - name: Build
+        run: sh ./gradlew generatePatchesFiles clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          run: sh ./gradlew generatePatchesFiles clean
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -44,28 +44,28 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Import GPG key (Primary)
+      - name: Import GPG keys
         uses: crazy-max/ghaction-import-gpg@v6
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
-          fingerprint: ${{ vars.GPG_FINGERPRINT }}
-
-      - name: Import GPG key (Secondary)
-        uses: crazy-max/ghaction-import-gpg@v6
-        with:
+          fingerprint: ${{ secrets.GPG_FINGERPRINT }}
           gpg_private_key_2: ${{ secrets.GPG_PRIVATE_KEY_2 }}
           passphrase_2: ${{ secrets.GPG_PASSPHRASE_2 }}
-          fingerprint_2: ${{ vars.GPG_FINGERPRINT_2 }}
+          fingerprint_2: ${{ secrets.GPG_FINGERPRINT_2 }}
           trust_level: 5
 
       - name: Configure Git signing
         run: |
-          git config --global user.signingkey ${{ vars.GPG_FINGERPRINT }}
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git config --global user.signingkey ${{ secrets.GPG_FINGERPRINT }}
           git config --global commit.gpgsign true
+          git config --global gpg.program gpg
 
       - name: Release
+        run: npm exec semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GPG_KEY_ID: ${{ vars.GPG_FINGERPRINT }}  # Especifica qué clave usar
-        run: npm exec semantic-release
+          GPG_KEY_ID: ${{ secrets.GPG_FINGERPRINT }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}  # Si necesitas publicar en npm
